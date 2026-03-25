@@ -11,7 +11,7 @@ import java.util.List;
  * @param created A timestamp indicating when this response was generated.
  * @param count   The total number of search results available on the server.
  * @param offset  The zero-based offset of this page of results.
- * @param results The list of {@link Recording} objects matched by the query.
+ * @param results The list of {@link Result} objects matched by the query.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public record MusicBrainzSearchResponse(
@@ -19,6 +19,6 @@ public record MusicBrainzSearchResponse(
         Integer count,
         Integer offset,
         @JsonProperty("recordings")
-        List<Recording> results
+        List<Result> results
 ) {
 }

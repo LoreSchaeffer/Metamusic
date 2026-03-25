@@ -20,11 +20,11 @@ public record Media(
         String id,
         Integer position,
         String format,
+        @JsonProperty("track")
+        List<Track> tracks,
         @JsonProperty("track-count")
         Integer trackCount,
         @JsonProperty("track-offset")
-        Integer trackOffset,
-        @JsonProperty("track")
-        List<Track> tracks
+        Integer trackOffset
 ) {
 }

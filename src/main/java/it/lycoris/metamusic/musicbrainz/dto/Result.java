@@ -10,24 +10,29 @@ import java.util.List;
  *
  * @param id               The MusicBrainz Identifier (MBID) for the recording.
  * @param score            The relevance score assigned to this recording in the search results.
+ * @param artistCreditId   The MBID representing the specific artist credit for this recording.
  * @param title            The title of the recording.
  * @param length           The duration of the recording in milliseconds.
  * @param video            True if this recording is flagged as a video.
- * @param firstReleaseDate The date when this recording was first released.
  * @param artistCredit     A list of {@link ArtistCredit} objects detailing the artists credited for this recording.
+ * @param firstReleaseDate The date when this recording was first released.
  * @param releases         A list of {@link Release} objects this recording appears on.
+ * @param isrcs            A list of International Standard Recording Codes (ISRCs) associated with this recording.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public record Recording(
+public record Result(
         String id,
         Integer score,
+        @JsonProperty("artist-credit-id")
+        String artistCreditId,
         String title,
-        Integer length,
+        Long length,
         Boolean video,
+        @JsonProperty("artist-credit")
+        List<ArtistCredit> artistCredit,
         @JsonProperty("first-release-date")
         String firstReleaseDate,
-        @JsonProperty("artist-credit")
-        List<ArtistCredit>  artistCredit,
-        List<Release> releases
+        List<Release> releases,
+        List<String> isrcs
 ) {
 }
