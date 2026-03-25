@@ -1,4 +1,5 @@
 # Metamusic API
+[![](https://jitpack.io/v/LoreSchaeffer/Metamusic.svg)](https://jitpack.io/#LoreSchaeffer/Metamusic)
 
 A robust, enterprise-grade Java 25 client library for aggregating music metadata from multiple external providers, including MusicBrainz and Apple iTunes.
 
