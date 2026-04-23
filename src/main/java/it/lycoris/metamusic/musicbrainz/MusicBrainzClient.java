@@ -75,15 +75,42 @@ public class MusicBrainzClient extends AbstractMusicClient<MusicBrainzSearchResp
     }
 
     /**
-     * Executes a search query for recordings against the MusicBrainz API with pagination parameters.
+     * Executes a search using a specialized Query Builder.
+     * This is the recommended way to perform accurate searches.
+     *
+     * @param queryBuilder The builder containing the search criteria.
+     * @param limit        Maximum number of results.
+     * @param offset       Search offset.
+     * @return The search response.
+     */
+    public MusicBrainzSearchResponse search(MusicBrainzQueryBuilder queryBuilder, int limit, int offset) {
+        return search(queryBuilder.build(), limit, offset);
+    }
+
+    /**
+     * Executes a search using a specialized Query Builder.
+     * This is the recommended way to perform accurate searches.
+     *
+     * @param queryBuilder The builder containing the search criteria.
+     * @return The search response.
+     */
+    public MusicBrainzSearchResponse search(MusicBrainzQueryBuilder queryBuilder) {
+        return search(queryBuilder.build(), 50, 0);
+    }
+
+    /**
+     * Executes a search query for recordings against the MusicBrainz API.
+     * Updated to handle complex Lucene queries more robustly.
      *
      * @param query  The Lucene-formatted query string.
      * @param limit  The maximum number of results to return.
-     * @param offset The zero-based offset into the full result set.
+     * @param offset The zero-based offset.
      * @return The {@link MusicBrainzSearchResponse} containing the search results.
-     * @throws MusicApiException if an error occurs during the API call or if an empty response is received.
+     * @throws MusicApiException if an error occurs.
      */
     public MusicBrainzSearchResponse search(String query, int limit, int offset) {
+        if (query == null || query.isBlank()) throw new MusicApiException("Search query cannot be null or empty.");
+
         String encodedQuery = URLEncoder.encode(query, StandardCharsets.UTF_8);
         String url = String.format("%s?query=%s&fmt=json&limit=%d&offset=%d", BASE_URL, encodedQuery, limit, offset);
 
@@ -95,16 +122,9 @@ public class MusicBrainzClient extends AbstractMusicClient<MusicBrainzSearchResp
                 .build();
 
         return executeRequest(request, MusicBrainzSearchResponse.class)
-                .orElseThrow(() -> new MusicApiException("Empty response received from MusicBrainz."));
+                .orElseThrow(() -> new MusicApiException("Empty response received from MusicBrainz for query: " + query));
     }
 
-    /**
-     * Executes a search query for recordings against the MusicBrainz API with default pagination
-     * (limit of 50, offset of 0).
-     *
-     * @param query The Lucene-formatted query string.
-     * @return The {@link MusicBrainzSearchResponse} containing the search results.
-     */
     @Override
     public MusicBrainzSearchResponse search(String query) {
         return search(query, 50, 0);
